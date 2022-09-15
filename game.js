@@ -18,7 +18,7 @@ const gameBoard = (() => {
     }
     //clear board
 
-    return { putSymbolToBoard, getBoard }
+    return { putSymbolToBoard, getBoard, checkIfSpaceEmpty }
 })();
 
 
@@ -45,31 +45,37 @@ const displayController = (() => {
 
 const game = (() => {
 
-    const player = playerFactory('jeff', 'X')
-    const computer = playerFactory('CPU', 'O')
+    const player = playerFactory('Milo', 'X')
+    const computer = playerFactory('Mgielka', 'O')
 
     let currentUser = player
 
 
     const setupBoard = () => {
         document.querySelectorAll('.board-field').forEach(element => {
-            element.addEventListener('click', game.playTurn)
+            element.addEventListener('click', playTurn)
         })
     }
 
     const playTurn = (event) => {
-        gameBoard.putSymbolToBoard(currentUser.symbol, event.target.id)
-        displayController.renderBoard()
-        changeCurrentPlayer()
+        if (gameBoard.checkIfSpaceEmpty(event.target.id)) {
+            gameBoard.putSymbolToBoard(currentUser.symbol, event.target.id)
+            displayController.renderBoard()
+            changeCurrentPlayer()
+        }
     }
 
     const changeCurrentPlayer = () => {
         return currentUser === player ? currentUser = computer : currentUser = player
     }
-    return { playTurn, setupBoard }
+
+    const play = () => {
+        setupBoard()
+    }
+    return { play }
     //start
     //restart
     //keep score
 })()
 
-game.setupBoard()
+game.play()
