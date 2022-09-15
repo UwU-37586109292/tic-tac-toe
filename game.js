@@ -1,7 +1,7 @@
-//displayController module
-//player factory
+
+
 const gameBoard = (() => {
-    let _board = new Array(9);
+    let _board = Array(9).fill("");
 
     const putSymbolToBoard = (symbol, boardIndex) => {
         if (checkIfSpaceEmpty(boardIndex)) {
@@ -10,26 +10,62 @@ const gameBoard = (() => {
     }
 
     const checkIfSpaceEmpty = (boardIndex) => {
-        return _board[boardIndex] === undefined
+        return _board[boardIndex] === ""
     }
 
     const getBoard = () => {
         return _board
     }
+    //clear board
 
-    return { putSymbolToBoard, showBoard }
-})();
-
-const displayController = (() => {
-    const renderBoard = () => {
-
-    }
+    return { putSymbolToBoard, getBoard }
 })();
 
 
 const playerFactory = (name, symbol) => {
-    return { name, symbol }
+    let _score = 0;
+    const addWin = () => {
+        _score++
+    }
+    const resetScore = () => {
+        _score = 0
+    }
+    return { name, symbol, addWin, resetScore }
 }
 
-const player = playerFactory('jeff', 'X')
-const computer = playerFactory('CPU', 'O')
+const displayController = (() => {
+
+    const renderBoard = () => {
+        for (let i = 0; i < gameBoard.getBoard().length; i++) {
+            document.querySelector(`div[id='${i}']`).innerText = gameBoard.getBoard()[i];
+        }
+    }
+    return { renderBoard }
+})();
+
+const game = (() => {
+
+    const player = playerFactory('jeff', 'X')
+    const computer = playerFactory('CPU', 'O')
+
+    let currentUser = player
+
+
+    const setupBoard = () => {
+        document.querySelectorAll('.board-field').forEach(element => {
+            element.addEventListener('click', game.playTurn)
+        })
+    }
+
+    const playTurn = (event) => {
+        gameBoard.putSymbolToBoard(currentUser.symbol, event.target.id)
+        displayController.renderBoard()
+    }
+    //track current user
+    return { playTurn, setupBoard }
+    //start
+    //restart
+    //keep score
+})()
+
+game.setupBoard()
