@@ -60,8 +60,12 @@ const game = (() => {
     const playTurn = (event) => {
         gameBoard.putSymbolToBoard(currentUser.symbol, event.target.id)
         displayController.renderBoard()
+        changeCurrentPlayer()
     }
-    //track current user
+
+    const changeCurrentPlayer = () => {
+        return currentUser === player ? currentUser = computer : currentUser = player
+    }
     return { playTurn, setupBoard }
     //start
     //restart
