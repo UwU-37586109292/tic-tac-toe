@@ -21,7 +21,9 @@ const gameBoard = (() => {
 })();
 
 const displayController = (() => {
+    const renderBoard = () => {
 
+    }
 })();
 
 
