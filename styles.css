@@ -1,0 +1,35 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+
+}
+
+body {
+    background: rosybrown;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    flex: 1 1 auto;
+
+}
+
+header,
+footer {
+    background: lightgray;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+footer {
+    margin-top: auto;
+}
+
+footer>a {
+    margin: 0 5px;
+    text-decoration: none;
+}
