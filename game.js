@@ -61,7 +61,11 @@ const playerFactory = (name, symbol) => {
     const getScore = () => {
         return _score
     }
-    return { name, symbol, addWin, resetScore, getScore }
+    const getName = () => {
+        return name
+    }
+    const getSymbol = () => { return symbol }
+    return { getName, getSymbol, addWin, resetScore, getScore }
 }
 
 const displayController = (() => {
@@ -72,16 +76,19 @@ const displayController = (() => {
         }
     }
 
-    const displayPlayerInfo = (index, player) => {
-        const playerInfoContainer = document.querySelectorAll(`.player-info-${index}`)
-        console.log(playerInfoContainer[0].children)
-        playerInfoContainer[0].children[0].innerText = `Player name: ${player.name}`
-        playerInfoContainer[0].children[1].innerText = `Symbol: ${player.symbol}`
-        playerInfoContainer[0].children[2].innerText = `Current score: ${player.getScore()}`
+    const displayPlayerInfo = (players) => {
+        for (let i = 0; i < players.length; i++) {
+            const player = players[i];
+            const playerInfoContainer = document.querySelector(`.player-info-${i + 1}`)
+            playerInfoContainer.children[0].innerText = `Player name: ${player.getName()}`
+            playerInfoContainer.children[1].innerText = `Symbol: ${player.getSymbol()}`
+            playerInfoContainer.children[2].innerText = `Current score: ${player.getScore()}`
+
+        }
     }
 
     const displayCurrentUser = (player) => {
-        document.querySelector('.current-turn').innerText = `It's ${player.name}'s turn`
+        document.querySelector('.current-turn').innerText = `It's ${player.getName()}'s turn`
     }
 
     return { renderBoard, displayPlayerInfo, displayCurrentUser }
@@ -89,14 +96,15 @@ const displayController = (() => {
 
 const game = (() => {
 
-    const player = playerFactory('jeff', 'X')
-    const computer = playerFactory('CPU', 'O')
+    const player = playerFactory('jeff', 'O')
+    const computer = playerFactory('CPU', 'X')
+    const players = [player, computer]
 
-    let currentUser = player
+    let currentUser = players[0]
     displayController.displayCurrentUser(currentUser)
 
-    displayController.displayPlayerInfo(1, player)
-    displayController.displayPlayerInfo(2, computer)
+
+    displayController.displayPlayerInfo(players)
 
 
     const enableBoard = () => {
@@ -112,14 +120,13 @@ const game = (() => {
 
     const playTurn = (event) => {
         if (gameBoard.checkIfSpaceEmpty(event.target.id)) {
-            gameBoard.putSymbolToBoard(currentUser.symbol, event.target.id)
+            gameBoard.putSymbolToBoard(currentUser.getSymbol(), event.target.id)
             displayController.renderBoard()
             if (gameBoard.checkWinCondition()) {
-                alert(currentUser.name + ' wins!')
+                alert(currentUser.getName() + ' wins!')
                 currentUser.addWin()
                 disableBoard()
-                displayController.displayPlayerInfo(1, player)
-                displayController.displayPlayerInfo(2, computer)
+                displayController.displayPlayerInfo(players)
             } else if (gameBoard.getNumberOfAvailableSpaces() === 0) {
                 alert('its a tie!')
                 disableBoard()
