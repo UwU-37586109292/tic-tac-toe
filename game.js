@@ -162,5 +162,5 @@ const game = (() => {
         displayController.displayCurrentUser(currentUser)
     }
 
-    return { setup, enableBoard, handlePlayerNameSubmit }
+    return { handlePlayerNameSubmit }
 })()
