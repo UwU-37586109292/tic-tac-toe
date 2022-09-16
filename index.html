@@ -41,6 +41,14 @@
             <div class="board-field" id="7"></div>
             <div class="board-field" id="8"></div>
         </div>
+
+        <div class="ask-name">
+            <form id="name-form" onsubmit="game.handlePlayerNameSubmit(event, name.value)">
+                <label for="name">Tell me your name*:</label>
+                <input type="text" name="name" id="name" required>
+                <button type="submit">That's it!</button>
+            </form>
+        </div>
     </main>
 
     <footer>

@@ -70,6 +70,16 @@ const playerFactory = (name, symbol) => {
 
 const displayController = (() => {
 
+    const showAskNameModal = () => {
+        const form = document.getElementById('name-form')
+        form.style.display = 'block'
+    }
+
+    const closeAskNameModal = () => {
+        const formContainer = document.getElementsByClassName('ask-name')[0]
+        formContainer.style.display = 'none'
+    }
+
     const renderBoard = () => {
         for (let i = 0; i < gameBoard.getBoard().length; i++) {
             document.querySelector(`div[id='${i}']`).innerText = gameBoard.getBoard()[i];
@@ -83,7 +93,6 @@ const displayController = (() => {
             playerInfoContainer.children[0].innerText = `Player name: ${player.getName()}`
             playerInfoContainer.children[1].innerText = `Symbol: ${player.getSymbol()}`
             playerInfoContainer.children[2].innerText = `Current score: ${player.getScore()}`
-
         }
     }
 
@@ -91,7 +100,7 @@ const displayController = (() => {
         document.querySelector('.current-turn').innerText = `It's ${player.getName()}'s turn`
     }
 
-    return { renderBoard, displayPlayerInfo, displayCurrentUser }
+    return { renderBoard, displayPlayerInfo, displayCurrentUser, showAskNameModal, closeAskNameModal }
 })();
 
 const game = (() => {
@@ -106,6 +115,11 @@ const game = (() => {
 
     displayController.displayPlayerInfo(players)
 
+    const handlePlayerNameSubmit = (event, name) => {
+        event.preventDefault()
+        console.log(name)
+        displayController.closeAskNameModal()
+    }
 
     const enableBoard = () => {
         document.querySelectorAll('.board-field').forEach(element => {
@@ -141,7 +155,7 @@ const game = (() => {
         displayController.displayCurrentUser(currentUser)
     }
 
-    return { enableBoard }
+    return { enableBoard, handlePlayerNameSubmit }
 
     //restart
 })()
