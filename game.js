@@ -168,6 +168,7 @@ const game = (() => {
             } else if (gameBoard.getNumberOfAvailableSpaces() === 0) {
                 alert('its a tie!')
                 disableBoard()
+                playNextRound()
             }
             else {
                 changeCurrentPlayer()
