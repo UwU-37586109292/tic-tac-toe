@@ -64,11 +64,24 @@ const playerFactory = (name, symbol) => {
     const getName = () => {
         return name
     }
+    const setName = (name) => {
+        this.name = name
+    }
     const getSymbol = () => { return symbol }
-    return { getName, getSymbol, addWin, resetScore, getScore }
+    return { getName, getSymbol, addWin, resetScore, getScore, setName }
 }
 
 const displayController = (() => {
+
+    const showAskNameModal = () => {
+        const form = document.getElementById('name-form')
+        form.style.display = 'block'
+    }
+
+    const closeAskNameModal = () => {
+        const formContainer = document.getElementsByClassName('ask-name')[0]
+        formContainer.style.display = 'none'
+    }
 
     const renderBoard = () => {
         for (let i = 0; i < gameBoard.getBoard().length; i++) {
@@ -83,7 +96,6 @@ const displayController = (() => {
             playerInfoContainer.children[0].innerText = `Player name: ${player.getName()}`
             playerInfoContainer.children[1].innerText = `Symbol: ${player.getSymbol()}`
             playerInfoContainer.children[2].innerText = `Current score: ${player.getScore()}`
-
         }
     }
 
@@ -91,27 +103,36 @@ const displayController = (() => {
         document.querySelector('.current-turn').innerText = `It's ${player.getName()}'s turn`
     }
 
-    return { renderBoard, displayPlayerInfo, displayCurrentUser }
+    return { renderBoard, displayPlayerInfo, displayCurrentUser, showAskNameModal, closeAskNameModal }
 })();
 
 const game = (() => {
+    let currentUser
+    let players
 
-    const player = playerFactory('jeff', 'O')
-    const computer = playerFactory('CPU', 'X')
-    const players = [player, computer]
+    const setup = (humanPlayer) => {
+        enableBoard()
+        const player = humanPlayer
+        const computer = playerFactory('Mgielka', 'X')
+        currentUser = player
+        players = [player, computer]
 
-    let currentUser = players[0]
-    displayController.displayCurrentUser(currentUser)
+        displayController.displayCurrentUser(currentUser)
+        displayController.displayPlayerInfo(players)
+    }
 
-
-    displayController.displayPlayerInfo(players)
-
+    const handlePlayerNameSubmit = (event, name) => {
+        event.preventDefault()
+        displayController.closeAskNameModal()
+        setup(playerFactory(name, 'O'))
+    }
 
     const enableBoard = () => {
         document.querySelectorAll('.board-field').forEach(element => {
             element.addEventListener('click', playTurn)
         })
     }
+
     const disableBoard = () => {
         document.querySelectorAll('.board-field').forEach(element => {
             element.removeEventListener('click', playTurn)
@@ -123,10 +144,10 @@ const game = (() => {
             gameBoard.putSymbolToBoard(currentUser.getSymbol(), event.target.id)
             displayController.renderBoard()
             if (gameBoard.checkWinCondition()) {
-                alert(currentUser.getName() + ' wins!')
                 currentUser.addWin()
                 disableBoard()
                 displayController.displayPlayerInfo(players)
+                alert(`${currentUser.getName()} won!`)
             } else if (gameBoard.getNumberOfAvailableSpaces() === 0) {
                 alert('its a tie!')
                 disableBoard()
@@ -137,13 +158,9 @@ const game = (() => {
         }
     }
     const changeCurrentPlayer = () => {
-        currentUser === player ? currentUser = computer : currentUser = player
+        currentUser === players[0] ? currentUser = players[1] : currentUser = players[0]
         displayController.displayCurrentUser(currentUser)
     }
 
-    return { enableBoard }
-
-    //restart
+    return { setup, enableBoard, handlePlayerNameSubmit }
 })()
-
-game.enableBoard()

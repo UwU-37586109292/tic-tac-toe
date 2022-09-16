@@ -41,6 +41,20 @@
             <div class="board-field" id="7"></div>
             <div class="board-field" id="8"></div>
         </div>
+
+        <div class="ask-name">
+            <form class="flex column" id="name-form" onsubmit="game.handlePlayerNameSubmit(event, name.value)">
+                <div class="flex">
+                    <label for="name">Tell me your name*:</label>
+                    <input type="text" name="name" id="name" required>
+                </div>
+                <div class="flex">
+                    <button type="submit">That's it!</button>
+                    <button type="button" onclick="game.handlePlayerNameSubmit(event, 'Jeff')">Just call me
+                        Jeff</button>
+                </div>
+            </form>
+        </div>
     </main>
 
     <footer>
