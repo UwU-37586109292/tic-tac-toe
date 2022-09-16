@@ -1,5 +1,3 @@
-
-
 const gameBoard = (() => {
     let _board = Array(9).fill("");
 
@@ -16,9 +14,35 @@ const gameBoard = (() => {
     const getBoard = () => {
         return _board
     }
-    //clear board
 
-    return { putSymbolToBoard, getBoard, checkIfSpaceEmpty }
+    const checkWinCondition = () => {
+        let winner = checkHorizontalLinesForWinner() || checkVerticalLinesForWinner() || checkDiagonalLinesForWinner()
+        if (winner)
+            return winner
+    }
+    const checkHorizontalLinesForWinner = () => {
+        for (let i = 0; i < 9; i = i + 3) {
+            if (_board[i] !== "" && _board[i] === _board[i + 1] && _board[i] === _board[i + 2]) {
+                return _board[i]
+            }
+        }
+    }
+    const checkVerticalLinesForWinner = () => {
+        for (let i = 0; i < 9; i++) {
+            if (_board[i] !== "" && _board[i] === _board[i + 3] && _board[i] === _board[i + 6]) {
+                return _board[i]
+            }
+        }
+    }
+    const checkDiagonalLinesForWinner = () => {
+        if (_board[0] !== "" && _board[0] === _board[4] && _board[0] === _board[8]) {
+            return _board[0]
+        } else if (_board[2] !== "" && _board[2] === _board[4] && _board[2] === _board[6]) {
+            return _board[2]
+        }
+    }
+
+    return { putSymbolToBoard, getBoard, checkIfSpaceEmpty, checkWinCondition }
 })();
 
 
@@ -30,7 +54,10 @@ const playerFactory = (name, symbol) => {
     const resetScore = () => {
         _score = 0
     }
-    return { name, symbol, addWin, resetScore }
+    const getScore = () => {
+        return _score
+    }
+    return { name, symbol, addWin, resetScore, getScore }
 }
 
 const displayController = (() => {
@@ -51,9 +78,14 @@ const game = (() => {
     let currentUser = player
 
 
-    const setupBoard = () => {
+    const enableBoard = () => {
         document.querySelectorAll('.board-field').forEach(element => {
             element.addEventListener('click', playTurn)
+        })
+    }
+    const disableBoard = () => {
+        document.querySelectorAll('.board-field').forEach(element => {
+            element.removeEventListener('click', game.playTurn)
         })
     }
 
@@ -61,21 +93,23 @@ const game = (() => {
         if (gameBoard.checkIfSpaceEmpty(event.target.id)) {
             gameBoard.putSymbolToBoard(currentUser.symbol, event.target.id)
             displayController.renderBoard()
-            changeCurrentPlayer()
+            if (gameBoard.checkWinCondition()) {
+                alert(currentUser.name + ' wins!')
+                currentUser.addWin()
+                disableBoard()
+            } else {
+                changeCurrentPlayer()
+            }
         }
     }
 
     const changeCurrentPlayer = () => {
         return currentUser === player ? currentUser = computer : currentUser = player
     }
-
-    const play = () => {
-        setupBoard()
-    }
-    return { play }
+    return { playTurn, enableBoard }
     //start
     //restart
     //keep score
 })()
 
-game.play()
+game.enableBoard()
