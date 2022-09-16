@@ -15,6 +15,10 @@ const gameBoard = (() => {
         return _board
     }
 
+    const getNumberOfAvailableSpaces = () => {
+        return _board.filter(element => element === "").length
+    }
+
     const checkWinCondition = () => {
         let winner = checkHorizontalLinesForWinner() || checkVerticalLinesForWinner() || checkDiagonalLinesForWinner()
         if (winner)
@@ -42,7 +46,7 @@ const gameBoard = (() => {
         }
     }
 
-    return { putSymbolToBoard, getBoard, checkIfSpaceEmpty, checkWinCondition }
+    return { putSymbolToBoard, getBoard, checkIfSpaceEmpty, checkWinCondition, getNumberOfAvailableSpaces }
 })();
 
 
@@ -67,7 +71,20 @@ const displayController = (() => {
             document.querySelector(`div[id='${i}']`).innerText = gameBoard.getBoard()[i];
         }
     }
-    return { renderBoard }
+
+    const displayPlayerInfo = (index, player) => {
+        const playerInfoContainer = document.querySelectorAll(`.player-info-${index}`)
+        console.log(playerInfoContainer[0].children)
+        playerInfoContainer[0].children[0].innerText = `Player name: ${player.name}`
+        playerInfoContainer[0].children[1].innerText = `Symbol: ${player.symbol}`
+        playerInfoContainer[0].children[2].innerText = `Current score: ${player.getScore()}`
+    }
+
+    const displayCurrentUser = (player) => {
+        document.querySelector('.current-turn').innerText = `It's ${player.name}'s turn`
+    }
+
+    return { renderBoard, displayPlayerInfo, displayCurrentUser }
 })();
 
 const game = (() => {
@@ -76,16 +93,20 @@ const game = (() => {
     const computer = playerFactory('CPU', 'O')
 
     let currentUser = player
+    displayController.displayCurrentUser(currentUser)
+
+    displayController.displayPlayerInfo(1, player)
+    displayController.displayPlayerInfo(2, computer)
 
 
     const enableBoard = () => {
         document.querySelectorAll('.board-field').forEach(element => {
-            element.addEventListener('click', game.playTurn)
+            element.addEventListener('click', playTurn)
         })
     }
     const disableBoard = () => {
         document.querySelectorAll('.board-field').forEach(element => {
-            element.removeEventListener('click', game.playTurn)
+            element.removeEventListener('click', playTurn)
         })
     }
 
@@ -97,19 +118,25 @@ const game = (() => {
                 alert(currentUser.name + ' wins!')
                 currentUser.addWin()
                 disableBoard()
-            } else {
+                displayController.displayPlayerInfo(1, player)
+                displayController.displayPlayerInfo(2, computer)
+            } else if (gameBoard.getNumberOfAvailableSpaces() === 0) {
+                alert('its a tie!')
+                disableBoard()
+            }
+            else {
                 changeCurrentPlayer()
             }
         }
     }
-
     const changeCurrentPlayer = () => {
-        return currentUser === player ? currentUser = computer : currentUser = player
+        currentUser === player ? currentUser = computer : currentUser = player
+        displayController.displayCurrentUser(currentUser)
     }
-    return { playTurn, enableBoard }
-    //start
+
+    return { enableBoard }
+
     //restart
-    //keep score
 })()
 
 game.enableBoard()
