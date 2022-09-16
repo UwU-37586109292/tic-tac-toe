@@ -18,7 +18,7 @@ const gameBoard = (() => {
     }
     //clear board
 
-    return { putSymbolToBoard, getBoard }
+    return { putSymbolToBoard, getBoard, checkIfSpaceEmpty }
 })();
 
 
@@ -58,9 +58,11 @@ const game = (() => {
     }
 
     const playTurn = (event) => {
-        gameBoard.putSymbolToBoard(currentUser.symbol, event.target.id)
-        displayController.renderBoard()
-        changeCurrentPlayer()
+        if (gameBoard.checkIfSpaceEmpty(event.target.id)) {
+            gameBoard.putSymbolToBoard(currentUser.symbol, event.target.id)
+            displayController.renderBoard()
+            changeCurrentPlayer()
+        }
     }
 
     const changeCurrentPlayer = () => {
