@@ -46,19 +46,26 @@ const gameBoard = (() => {
         }
     }
 
+    const getRandomFreeSpot = () => {
+        let randomIndex = 0
+        do {
+            randomIndex = Math.floor(Math.random() * 8)
+        } while (!checkIfSpaceEmpty(randomIndex));
+        return randomIndex
+    }
+
     const clearBoard = () => {
         _board = Array(9).fill("")
     }
 
-    return { clearBoard, putSymbolToBoard, getBoard, checkIfSpaceEmpty, checkWinCondition, getNumberOfAvailableSpaces }
+    return { getRandomFreeSpot, clearBoard, putSymbolToBoard, getBoard, checkIfSpaceEmpty, checkWinCondition, getNumberOfAvailableSpaces }
 })();
 
 
-const playerFactory = (name, symbol) => {
+const playerFactory = (name, symbol, useAI) => {
     let _score = 0;
     const addWin = () => {
         _score++
-        console.log('Current score for ' + getName() + ": " + _score)
     }
     const resetScore = () => {
         _score = 0
@@ -72,8 +79,11 @@ const playerFactory = (name, symbol) => {
     const setName = (name) => {
         this.name = name
     }
+    const isComputer = () => {
+        return useAI === true
+    }
     const getSymbol = () => { return symbol }
-    return { getName, getSymbol, addWin, resetScore, getScore, setName }
+    return { isComputer, getName, getSymbol, addWin, resetScore, getScore, setName }
 }
 
 const displayController = (() => {
@@ -118,7 +128,7 @@ const game = (() => {
     const setup = (humanPlayer) => {
         enableBoard()
         const player = humanPlayer
-        const computer = playerFactory('Mgielka', 'X')
+        const computer = playerFactory('CPU', 'X', true)
         currentUser = player
         players = [player, computer]
 
@@ -143,19 +153,24 @@ const game = (() => {
 
     const enableBoard = () => {
         document.querySelectorAll('.board-field').forEach(element => {
-            element.addEventListener('click', playTurn)
+            element.addEventListener('click', makeMove)
         })
     }
 
     const disableBoard = () => {
         document.querySelectorAll('.board-field').forEach(element => {
-            element.removeEventListener('click', playTurn)
+            element.removeEventListener('click', makeMove)
         })
     }
 
-    const playTurn = (event) => {
-        if (gameBoard.checkIfSpaceEmpty(event.target.id)) {
-            gameBoard.putSymbolToBoard(currentUser.getSymbol(), event.target.id)
+    const makeMove = (event) => {
+        const boardId = event.target.id
+        playTurn(boardId)
+    }
+
+    const playTurn = (boardId) => {
+        if (gameBoard.checkIfSpaceEmpty(boardId)) {
+            gameBoard.putSymbolToBoard(currentUser.getSymbol(), boardId)
             displayController.renderBoard()
             if (gameBoard.checkWinCondition()) {
                 currentUser.addWin()
@@ -172,6 +187,10 @@ const game = (() => {
             }
             else {
                 changeCurrentPlayer()
+                if (currentUser.isComputer()) {
+                    //make it seem that CPU 'thinks'
+                    setTimeout(() => { playTurn(gameBoard.getRandomFreeSpot()) }, 500)
+                }
             }
         }
     }
