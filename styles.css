@@ -22,6 +22,28 @@ footer {
     padding: 10px;
 }
 
+.flex {
+    display: flex;
+    margin: 5px;
+    justify-content: space-around;
+}
+
+label {
+    margin-right: 5px;
+}
+
+.column {
+    flex-direction: column;
+}
+
+button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background-color: beige;
+    border: 1px solid salmon;
+}
+
 footer {
     margin-top: auto;
 }
@@ -79,8 +101,9 @@ main {
 
 #name-form {
     background-color: aliceblue;
+    border-radius: 8px;
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: fit-content;
 }
