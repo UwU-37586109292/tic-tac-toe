@@ -57,3 +57,10 @@ main {
     align-items: center;
     background-color: rosybrown;
 }
+
+.players {
+    display: flex;
+    width: 75vw;
+    margin: 20px;
+    justify-content: space-between;
+}
