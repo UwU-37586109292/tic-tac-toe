@@ -46,7 +46,11 @@ const gameBoard = (() => {
         }
     }
 
-    return { putSymbolToBoard, getBoard, checkIfSpaceEmpty, checkWinCondition, getNumberOfAvailableSpaces }
+    const clearBoard = () => {
+        _board = Array(9).fill("")
+    }
+
+    return { clearBoard, putSymbolToBoard, getBoard, checkIfSpaceEmpty, checkWinCondition, getNumberOfAvailableSpaces }
 })();
 
 
@@ -54,6 +58,7 @@ const playerFactory = (name, symbol) => {
     let _score = 0;
     const addWin = () => {
         _score++
+        console.log('Current score for ' + getName() + ": " + _score)
     }
     const resetScore = () => {
         _score = 0
@@ -121,6 +126,15 @@ const game = (() => {
         displayController.displayPlayerInfo(players)
     }
 
+    const playNextRound = () => {
+        gameBoard.clearBoard()
+        displayController.renderBoard()
+        enableBoard()
+        currentUser = players[0]
+        displayController.displayCurrentUser(currentUser)
+        displayController.displayPlayerInfo(players)
+    }
+
     const handlePlayerNameSubmit = (event, name) => {
         event.preventDefault()
         displayController.closeAskNameModal()
@@ -148,6 +162,9 @@ const game = (() => {
                 disableBoard()
                 displayController.displayPlayerInfo(players)
                 alert(`${currentUser.getName()} won!`)
+                if (currentUser.getScore() === 3) {
+                    alert(`${currentUser.getName()} won 3 rounds! Well done <3`)
+                } else { playNextRound() }
             } else if (gameBoard.getNumberOfAvailableSpaces() === 0) {
                 alert('its a tie!')
                 disableBoard()
