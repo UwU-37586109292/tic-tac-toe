@@ -80,7 +80,7 @@ const playerFactory = (name, symbol, useAI) => {
         this.name = name
     }
     const isComputer = () => {
-        return useAI === true
+        return useAI
     }
     const getSymbol = () => { return symbol }
     return { isComputer, getName, getSymbol, addWin, resetScore, getScore, setName }
@@ -89,13 +89,17 @@ const playerFactory = (name, symbol, useAI) => {
 const displayController = (() => {
 
     const showAskNameModal = () => {
-        const form = document.getElementById('name-form')
+        const form = document.getElementById('name-modal')
         form.style.display = 'block'
     }
 
     const closeAskNameModal = () => {
         const formContainer = document.getElementsByClassName('ask-name')[0]
         formContainer.style.display = 'none'
+    }
+
+    const closeChoosePlayerModal = () => {
+        document.getElementsByClassName('game-mode')[0].style.display = 'none'
     }
 
     const renderBoard = () => {
@@ -118,17 +122,33 @@ const displayController = (() => {
         document.querySelector('.current-turn').innerText = `It's ${player.getName()}'s turn`
     }
 
-    return { renderBoard, displayPlayerInfo, displayCurrentUser, showAskNameModal, closeAskNameModal }
+    return { renderBoard, displayPlayerInfo, displayCurrentUser, showAskNameModal, closeAskNameModal, closeChoosePlayerModal }
 })();
 
 const game = (() => {
     let currentUser
     let players
 
-    const setup = (humanPlayer) => {
+    const initialize = () => {
+        const nameForm = document.getElementById('name-form')
+        nameForm.addEventListener('submit', handlePlayerNameSubmit)
+        document.getElementById('default-name').addEventListener('click', handlePlayerNameSubmit)
+
+        document.getElementById('single-player').addEventListener('click', function (e) {
+            displayController.closeChoosePlayerModal()
+            displayController.showAskNameModal()
+        })
+
+        document.getElementById('versus').addEventListener('click', function (e) {
+            displayController.closeChoosePlayerModal()
+            displayController.showAskNameModal()
+        })
+    }
+
+    const setup = (player1, player2) => {
         enableBoard()
-        const player = humanPlayer
-        const computer = playerFactory('CPU', 'X', true)
+        const player = player1
+        const computer = player2 ? player2 : playerFactory('CPU', 'X', true)
         currentUser = player
         players = [player, computer]
 
@@ -151,13 +171,10 @@ const game = (() => {
         displayController.closeAskNameModal()
         if (!players) {
             setup(playerFactory(name ? name : 'Jeff', 'O'))
+        } else {
+            setup(playerFactory())
         }
     }
-
-    const nameForm = document.getElementById('name-form')
-    nameForm.addEventListener('submit', handlePlayerNameSubmit)
-    document.getElementById('default-name').addEventListener('click', handlePlayerNameSubmit)
-
 
     const enableBoard = () => {
         document.querySelectorAll('.board-field').forEach(element => {
@@ -207,5 +224,7 @@ const game = (() => {
         displayController.displayCurrentUser(currentUser)
     }
 
-    return {}
+    return { initialize }
 })()
+
+game.initialize()
