@@ -42,11 +42,29 @@
             <div class="board-field" id="8"></div>
         </div>
 
-        <div class="ask-name">
-            <form class="flex column" id="name-form">
+        <!-- Select game mode modal -->
+        <div class="modal game-mode">
+            <div class="modal-content">
+                <p>Select game mode:</p>
                 <div class="flex">
-                    <label for="name">Tell me your name*:</label>
-                    <input type="text" name="name" id="name" required>
+                    <button id="single-player">1 player</button>
+                    <button id="versus">2 players</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Get player name modal -->
+        <div class="ask-name modal" id="name-modal">
+            <form class="modal-content flex column" id="name-form">
+                <div class="flex column">
+                    <div class="flex" id="player-1-input">
+                        <label for="name-1" id="2-players-label-1">Name of player 1*:</label>
+                        <input type="text" name="name-1" id="name-1" required>
+                    </div>
+                    <div class="flex" id="player-2-input">
+                        <label for="name-2" id="2-players-label-2">Name of player 2*:</label>
+                        <input type="text" name="name-2" id="name-2" required>
+                    </div>
                 </div>
                 <div class="flex">
                     <button type="submit">That's it!</button>
