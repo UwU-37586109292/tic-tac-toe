@@ -88,9 +88,21 @@ const playerFactory = (name, symbol, useAI) => {
 
 const displayController = (() => {
 
-    const showAskNameModal = () => {
+    const showAskNameModal = (numberOfPlayers) => {
         const form = document.getElementById('name-modal')
         form.style.display = 'block'
+        const nameForm = document.getElementById('name-form')
+        const defaultNameBtn = document.getElementById('default-name')
+        nameForm.addEventListener('submit', game.handlePlayerNameSubmit)
+        defaultNameBtn.addEventListener('click', game.handlePlayerNameSubmit)
+
+        if (numberOfPlayers > 1) {
+            document.getElementById('player-2-input').style.display = 'block'
+            defaultNameBtn.style.display = 'none'
+        } else {
+            document.getElementById('player-2-input').style.display = 'none'
+            defaultNameBtn.style.display = 'block'
+        }
     }
 
     const closeAskNameModal = () => {
@@ -130,27 +142,22 @@ const game = (() => {
     let players
 
     const initialize = () => {
-        const nameForm = document.getElementById('name-form')
-        nameForm.addEventListener('submit', handlePlayerNameSubmit)
-        document.getElementById('default-name').addEventListener('click', handlePlayerNameSubmit)
-
         document.getElementById('single-player').addEventListener('click', function (e) {
             displayController.closeChoosePlayerModal()
             displayController.showAskNameModal()
         })
-
         document.getElementById('versus').addEventListener('click', function (e) {
             displayController.closeChoosePlayerModal()
-            displayController.showAskNameModal()
+            displayController.showAskNameModal(2)
         })
     }
 
     const setup = (player1, player2) => {
         enableBoard()
-        const player = player1
-        const computer = player2 ? player2 : playerFactory('CPU', 'X', true)
-        currentUser = player
-        players = [player, computer]
+        const firstPlayer = player1
+        const secondPlayer = player2 ? player2 : playerFactory('CPU', 'X', true)
+        currentUser = firstPlayer
+        players = [firstPlayer, secondPlayer]
 
         displayController.displayCurrentUser(currentUser)
         displayController.displayPlayerInfo(players)
@@ -167,12 +174,14 @@ const game = (() => {
 
     const handlePlayerNameSubmit = () => {
         event.preventDefault()
-        const name = new FormData(document.getElementById('name-form')).get('name')
+        const name = new FormData(document.getElementById('name-form')).get('name-1')
+        const player2Name = new FormData(document.getElementById('name-form')).get('name-2')
         displayController.closeAskNameModal()
-        if (!players) {
-            setup(playerFactory(name ? name : 'Jeff', 'O'))
+        const player1Name = name ? name : 'Jeff'
+        if (player2Name) {
+            setup(playerFactory(player1Name, 'O'), playerFactory(player2Name, 'X'))
         } else {
-            setup(playerFactory())
+            setup(playerFactory(player1Name, 'O'))
         }
     }
 
@@ -224,7 +233,7 @@ const game = (() => {
         displayController.displayCurrentUser(currentUser)
     }
 
-    return { initialize }
+    return { initialize, handlePlayerNameSubmit }
 })()
 
 game.initialize()
