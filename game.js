@@ -125,7 +125,6 @@ const game = (() => {
     let currentUser
     let players
 
-
     const setup = (humanPlayer) => {
         enableBoard()
         const player = humanPlayer
@@ -150,11 +149,14 @@ const game = (() => {
         event.preventDefault()
         const name = new FormData(document.getElementById('name-form')).get('name')
         displayController.closeAskNameModal()
-        setup(playerFactory(name, 'O'))
+        if (!players) {
+            setup(playerFactory(name ? name : 'Jeff', 'O'))
+        }
     }
 
     const nameForm = document.getElementById('name-form')
     nameForm.addEventListener('submit', handlePlayerNameSubmit)
+    document.getElementById('default-name').addEventListener('click', handlePlayerNameSubmit)
 
 
     const enableBoard = () => {
