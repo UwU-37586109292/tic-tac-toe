@@ -125,6 +125,7 @@ const game = (() => {
     let currentUser
     let players
 
+
     const setup = (humanPlayer) => {
         enableBoard()
         const player = humanPlayer
@@ -145,11 +146,16 @@ const game = (() => {
         displayController.displayPlayerInfo(players)
     }
 
-    const handlePlayerNameSubmit = (event, name) => {
+    const handlePlayerNameSubmit = () => {
         event.preventDefault()
+        const name = new FormData(document.getElementById('name-form')).get('name')
         displayController.closeAskNameModal()
         setup(playerFactory(name, 'O'))
     }
+
+    const nameForm = document.getElementById('name-form')
+    nameForm.addEventListener('submit', handlePlayerNameSubmit)
+
 
     const enableBoard = () => {
         document.querySelectorAll('.board-field').forEach(element => {
@@ -199,5 +205,5 @@ const game = (() => {
         displayController.displayCurrentUser(currentUser)
     }
 
-    return { handlePlayerNameSubmit }
+    return {}
 })()
