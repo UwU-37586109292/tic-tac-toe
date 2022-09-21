@@ -155,11 +155,16 @@ const displayController = (() => {
             document.querySelector('.player-info-1').classList.remove('active')
             document.querySelector('.player-info-2').classList.add('active')
             document.getElementById('katana').classList.add('reverted')
-
         }
     }
 
-    return { renderBoard, displayPlayerInfo, markCurrentUser, showAskNameModal, closeAskNameModal, closeChoosePlayerModal, removeWinnerFlags }
+    const displayEndGameModal = (winner) => {
+        console.log('henlo')
+        document.querySelector('.modal.winner').style.display = 'block'
+        document.querySelector('.modal.winner p').textContent = `${winner.getName()} won 3 times! Congrats!`
+    }
+
+    return { displayEndGameModal, renderBoard, displayPlayerInfo, markCurrentUser, showAskNameModal, closeAskNameModal, closeChoosePlayerModal, removeWinnerFlags }
 })();
 
 const game = (() => {
@@ -245,7 +250,7 @@ const game = (() => {
                 displayController.displayPlayerInfo(players)
                 alert(`${currentUser.getName()} won!`)
                 if (currentUser.getScore() === 3) {
-                    alert(`${currentUser.getName()} won 3 rounds! Well done <3`)
+                    displayController.displayEndGameModal(currentUser)
                 } else { playNextRound() }
             } else if (gameBoard.getNumberOfAvailableSpaces() === 0) {
                 alert('its a tie!')

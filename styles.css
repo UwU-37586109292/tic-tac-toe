@@ -60,7 +60,7 @@ button:hover {
 }
 
 .controls {
-    margin-top: 20px;
+    margin: 20px;
 }
 
 footer {
@@ -152,5 +152,9 @@ main {
 }
 
 .ask-name {
+    display: none;
+}
+
+.modal.winner {
     display: none;
 }
