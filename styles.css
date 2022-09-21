@@ -158,3 +158,21 @@ main {
 .modal.winner {
     display: none;
 }
+
+.round-winner.vanish {
+    animation-duration: 5s;
+    animation-name: vanish;
+    animation-fill-mode: forwards;
+
+}
+
+@keyframes vanish {
+    from {
+        opacity: 100;
+    }
+
+    to {
+        opacity: 0;
+    }
+
+}

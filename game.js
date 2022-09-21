@@ -168,7 +168,16 @@ const displayController = (() => {
         document.getElementById('btnClose').addEventListener('click', function (e) { document.querySelector('.modal.winner').style.display = 'none' })
     }
 
-    return { displayEndGameModal, renderBoard, displayPlayerInfo, markCurrentUser, showAskNameModal, closeAskNameModal, closeChoosePlayerModal, removeWinnerFlags }
+    const displayRoundWinner = (winner) => {
+        const winnerElement = document.querySelector('.round-winner')
+        winnerElement.classList.add('vanish')
+        winnerElement.textContent = `${winner.getName()} won this round`
+
+        const newone = winnerElement.cloneNode(true);
+        winnerElement.parentNode.replaceChild(newone, winnerElement);
+    }
+
+    return { displayRoundWinner, displayEndGameModal, renderBoard, displayPlayerInfo, markCurrentUser, showAskNameModal, closeAskNameModal, closeChoosePlayerModal, removeWinnerFlags }
 })();
 
 const game = (() => {
@@ -256,7 +265,7 @@ const game = (() => {
                 currentUser.addWin()
                 disableBoard()
                 displayController.displayPlayerInfo(players)
-                alert(`${currentUser.getName()} won!`)
+                displayController.displayRoundWinner(currentUser)
                 if (currentUser.getScore() === 3) {
                     displayController.displayEndGameModal(currentUser)
                 } else { playNextRound() }
