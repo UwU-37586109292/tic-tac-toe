@@ -277,8 +277,13 @@ const game = (() => {
             else {
                 changeCurrentPlayer()
                 if (currentUser.isComputer()) {
-                    //make it seem that CPU 'thinks'
-                    setTimeout(() => { playTurn(gameBoard.getRandomFreeSpot()) }, 500)
+                    //disable board to avoid player clicking it while CPU thinks
+                    disableBoard()
+                    //make it seem that CPU 'thinks'  
+                    setTimeout(() => {
+                        playTurn(gameBoard.getRandomFreeSpot())
+                        enableBoard()
+                    }, 500)
                 }
             }
         }
