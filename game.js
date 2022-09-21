@@ -130,11 +130,21 @@ const displayController = (() => {
         }
     }
 
-    const displayCurrentUser = (player) => {
-        document.querySelector('.current-turn').innerText = `It's ${player.getName()}'s turn`
+    const markCurrentUser = (player) => {
+        const symbolToSetActive = player.getSymbol()
+        if (symbolToSetActive === document.querySelector('.player-info-1 .player-symbol').textContent.slice(-1)) {
+            document.querySelector('.player-info-1').classList.add('active')
+            document.querySelector('.player-info-2').classList.remove('active')
+            document.querySelector('img').classList.remove('reverted')
+        } else {
+            document.querySelector('.player-info-1').classList.remove('active')
+            document.querySelector('.player-info-2').classList.add('active')
+            document.querySelector('img').classList.add('reverted')
+
+        }
     }
 
-    return { renderBoard, displayPlayerInfo, displayCurrentUser, showAskNameModal, closeAskNameModal, closeChoosePlayerModal }
+    return { renderBoard, displayPlayerInfo, markCurrentUser, showAskNameModal, closeAskNameModal, closeChoosePlayerModal }
 })();
 
 const game = (() => {
@@ -166,9 +176,8 @@ const game = (() => {
         const secondPlayer = player2 ? player2 : playerFactory('CPU', 'X', true)
         currentUser = firstPlayer
         players = [firstPlayer, secondPlayer]
-
-        displayController.displayCurrentUser(currentUser)
         displayController.displayPlayerInfo(players)
+        displayController.markCurrentUser(currentUser)
     }
 
     const playNextRound = () => {
@@ -176,7 +185,7 @@ const game = (() => {
         displayController.renderBoard()
         enableBoard()
         currentUser = players[0]
-        displayController.displayCurrentUser(currentUser)
+        displayController.markCurrentUser(currentUser)
         displayController.displayPlayerInfo(players)
     }
 
@@ -238,7 +247,7 @@ const game = (() => {
     }
     const changeCurrentPlayer = () => {
         currentUser === players[0] ? currentUser = players[1] : currentUser = players[0]
-        displayController.displayCurrentUser(currentUser)
+        displayController.markCurrentUser(currentUser)
     }
 
     return { initialize, handlePlayerNameSubmit }

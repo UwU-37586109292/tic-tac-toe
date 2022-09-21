@@ -109,6 +109,20 @@ main {
     width: 75vw;
     margin: 20px;
     justify-content: space-between;
+    padding: 6px;
+}
+
+.players>* {
+    padding: 2px;
+}
+
+.pointer>img {
+    max-width: 250px;
+}
+
+.reverted {
+    transform-origin: center center;
+    transform: scale(-1, 1)
 }
 
 .modal {
