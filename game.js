@@ -159,9 +159,13 @@ const displayController = (() => {
     }
 
     const displayEndGameModal = (winner) => {
-        console.log('henlo')
         document.querySelector('.modal.winner').style.display = 'block'
         document.querySelector('.modal.winner p').textContent = `${winner.getName()} won 3 times! Congrats!`
+        document.getElementById('btnNew').addEventListener('click', function (e) {
+            game.reset()
+            document.querySelector('.modal.winner').style.display = 'none'
+        })
+        document.getElementById('btnClose').addEventListener('click', function (e) { document.querySelector('.modal.winner').style.display = 'none' })
     }
 
     return { displayEndGameModal, renderBoard, displayPlayerInfo, markCurrentUser, showAskNameModal, closeAskNameModal, closeChoosePlayerModal, removeWinnerFlags }
@@ -180,15 +184,18 @@ const game = (() => {
             displayController.closeChoosePlayerModal()
             displayController.showAskNameModal(2)
         })
-        document.getElementsByClassName('reset')[0].addEventListener('click', function (e) {
-            gameBoard.clearBoard()
-            players.forEach(player => {
-                player.resetScore()
-            })
-            displayController.renderBoard()
-            displayController.displayPlayerInfo(players)
-            displayController.removeWinnerFlags()
+        document.getElementsByClassName('reset')[0].addEventListener('click', reset)
+    }
+
+    const reset = () => {
+        gameBoard.clearBoard()
+        enableBoard()
+        players.forEach(player => {
+            player.resetScore()
         })
+        displayController.renderBoard()
+        displayController.displayPlayerInfo(players)
+        displayController.removeWinnerFlags()
     }
 
     const setup = (player1, player2) => {
@@ -224,6 +231,7 @@ const game = (() => {
     }
 
     const enableBoard = () => {
+        disableBoard()
         document.querySelectorAll('.board-field').forEach(element => {
             element.addEventListener('click', makeMove)
         })
@@ -271,7 +279,7 @@ const game = (() => {
         displayController.markCurrentUser(currentUser)
     }
 
-    return { initialize, handlePlayerNameSubmit }
+    return { initialize, handlePlayerNameSubmit, reset }
 })()
 
 game.initialize()
