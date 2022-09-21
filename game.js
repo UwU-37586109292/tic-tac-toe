@@ -124,17 +124,60 @@ const displayController = (() => {
         for (let i = 0; i < players.length; i++) {
             const player = players[i];
             const playerInfoContainer = document.querySelector(`.player-info-${i + 1}`)
+            const playerWins = playerInfoContainer.children[2]
             playerInfoContainer.children[0].innerText = `Player name: ${player.getName()}`
             playerInfoContainer.children[1].innerText = `Symbol: ${player.getSymbol()}`
-            playerInfoContainer.children[2].innerText = `Current score: ${player.getScore()}`
+            if (playerWins.children.length < player.getScore()) {
+                const winSvg = document.createElement('img')
+                winSvg.setAttribute('src', '../assets/konoha.svg')
+                winSvg.setAttribute('alt', 'win-symbol')
+                playerWins.appendChild(winSvg)
+            }
         }
     }
 
-    const displayCurrentUser = (player) => {
-        document.querySelector('.current-turn').innerText = `It's ${player.getName()}'s turn`
+    const removeWinnerFlags = () => {
+        const wins = document.getElementsByClassName('wins')
+        Array.from(wins).forEach(winElement => {
+            while (winElement.firstChild) {
+                winElement.removeChild(winElement.lastChild)
+            }
+        })
     }
 
-    return { renderBoard, displayPlayerInfo, displayCurrentUser, showAskNameModal, closeAskNameModal, closeChoosePlayerModal }
+    const markCurrentUser = (player) => {
+        const symbolToSetActive = player.getSymbol()
+        if (symbolToSetActive === document.querySelector('.player-info-1 .player-symbol').textContent.slice(-1)) {
+            document.querySelector('.player-info-1').classList.add('active')
+            document.querySelector('.player-info-2').classList.remove('active')
+            document.getElementById('katana').classList.remove('reverted')
+        } else {
+            document.querySelector('.player-info-1').classList.remove('active')
+            document.querySelector('.player-info-2').classList.add('active')
+            document.getElementById('katana').classList.add('reverted')
+        }
+    }
+
+    const displayEndGameModal = (winner) => {
+        document.querySelector('.modal.winner').style.display = 'block'
+        document.querySelector('.modal.winner p').textContent = `${winner.getName()} won 3 times! Congrats!`
+        document.getElementById('btnNew').addEventListener('click', function (e) {
+            game.reset()
+            document.querySelector('.modal.winner').style.display = 'none'
+        })
+        document.getElementById('btnClose').addEventListener('click', function (e) { document.querySelector('.modal.winner').style.display = 'none' })
+    }
+
+    const displayRoundWinner = (winner) => {
+        const winnerElement = document.querySelector('.round-winner')
+        winnerElement.classList.add('vanish')
+        winnerElement.textContent = `${winner.getName()} won this round`
+
+        const newone = winnerElement.cloneNode(true);
+        winnerElement.parentNode.replaceChild(newone, winnerElement);
+    }
+
+    return { displayRoundWinner, displayEndGameModal, renderBoard, displayPlayerInfo, markCurrentUser, showAskNameModal, closeAskNameModal, closeChoosePlayerModal, removeWinnerFlags }
 })();
 
 const game = (() => {
@@ -150,14 +193,18 @@ const game = (() => {
             displayController.closeChoosePlayerModal()
             displayController.showAskNameModal(2)
         })
-        document.getElementsByClassName('reset')[0].addEventListener('click', function (e) {
-            gameBoard.clearBoard()
-            players.forEach(player => {
-                player.resetScore()
-            })
-            displayController.renderBoard()
-            displayController.displayPlayerInfo(players)
+        document.getElementsByClassName('reset')[0].addEventListener('click', reset)
+    }
+
+    const reset = () => {
+        gameBoard.clearBoard()
+        enableBoard()
+        players.forEach(player => {
+            player.resetScore()
         })
+        displayController.renderBoard()
+        displayController.displayPlayerInfo(players)
+        displayController.removeWinnerFlags()
     }
 
     const setup = (player1, player2) => {
@@ -166,9 +213,8 @@ const game = (() => {
         const secondPlayer = player2 ? player2 : playerFactory('CPU', 'X', true)
         currentUser = firstPlayer
         players = [firstPlayer, secondPlayer]
-
-        displayController.displayCurrentUser(currentUser)
         displayController.displayPlayerInfo(players)
+        displayController.markCurrentUser(currentUser)
     }
 
     const playNextRound = () => {
@@ -176,7 +222,7 @@ const game = (() => {
         displayController.renderBoard()
         enableBoard()
         currentUser = players[0]
-        displayController.displayCurrentUser(currentUser)
+        displayController.markCurrentUser(currentUser)
         displayController.displayPlayerInfo(players)
     }
 
@@ -185,15 +231,16 @@ const game = (() => {
         const name = new FormData(document.getElementById('name-form')).get('name-1')
         const player2Name = new FormData(document.getElementById('name-form')).get('name-2')
         displayController.closeAskNameModal()
-        const player1Name = name ? name : 'Jeff'
+        const player1Name = name ? name : 'Hibiki'
         if (player2Name) {
-            setup(playerFactory(player1Name, 'O'), playerFactory(player2Name, 'X'))
+            setup(playerFactory(player1Name, '水'), playerFactory(player2Name, '火'))
         } else {
-            setup(playerFactory(player1Name, 'O'))
+            setup(playerFactory(player1Name, '水'), playerFactory('CPU', '火', true))
         }
     }
 
     const enableBoard = () => {
+        disableBoard()
         document.querySelectorAll('.board-field').forEach(element => {
             element.addEventListener('click', makeMove)
         })
@@ -218,9 +265,9 @@ const game = (() => {
                 currentUser.addWin()
                 disableBoard()
                 displayController.displayPlayerInfo(players)
-                alert(`${currentUser.getName()} won!`)
+                displayController.displayRoundWinner(currentUser)
                 if (currentUser.getScore() === 3) {
-                    alert(`${currentUser.getName()} won 3 rounds! Well done <3`)
+                    displayController.displayEndGameModal(currentUser)
                 } else { playNextRound() }
             } else if (gameBoard.getNumberOfAvailableSpaces() === 0) {
                 alert('its a tie!')
@@ -238,10 +285,10 @@ const game = (() => {
     }
     const changeCurrentPlayer = () => {
         currentUser === players[0] ? currentUser = players[1] : currentUser = players[0]
-        displayController.displayCurrentUser(currentUser)
+        displayController.markCurrentUser(currentUser)
     }
 
-    return { initialize, handlePlayerNameSubmit }
+    return { initialize, handlePlayerNameSubmit, reset }
 })()
 
 game.initialize()

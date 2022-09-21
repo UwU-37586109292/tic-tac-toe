@@ -1,13 +1,20 @@
+@font-face {
+    font-family: Kayooh;
+    src: url(./assets/KayoohRegular-mLKyv.ttf) format("truetype")
+}
+
 html,
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-
+    font-family: 'Kayooh', 'Roboto', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: xx-large;
 }
 
 body {
-    background: rosybrown;
+    background: url(./assets/wallpaper2.jpg) no-repeat center fixed;
+    background-size: cover;
+
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -15,11 +22,12 @@ body {
 
 header,
 footer {
-    background: lightgray;
+    background: #ababab;
     display: flex;
     align-content: center;
     justify-content: center;
     padding: 10px;
+    ;
 }
 
 .flex {
@@ -42,6 +50,9 @@ button {
     border-radius: 10px;
     background-color: beige;
     border: 1px solid salmon;
+    font-family: 'Kayooh', 'Roboto', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: x-large;
+
 }
 
 button:hover {
@@ -49,7 +60,7 @@ button:hover {
 }
 
 .controls {
-    margin-top: 20px;
+    margin: 20px;
 }
 
 footer {
@@ -74,18 +85,23 @@ main {
 
 .gameboard {
     margin-top: 3%;
-    background-color: black;
     grid-template-columns: repeat(3, 150px);
     grid-template-rows: repeat(3, 150px);
-    gap: 2px;
 }
 
 .board-field {
-    font-size: 102pt;
+    font-size: 50pt;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rosybrown;
+}
+
+.border-right {
+    border-right: 2px solid black;
+}
+
+.border-bottom {
+    border-bottom: 2px solid black;
 }
 
 .players {
@@ -93,6 +109,24 @@ main {
     width: 75vw;
     margin: 20px;
     justify-content: space-between;
+    padding: 6px;
+}
+
+.players>* {
+    padding: 2px;
+}
+
+#katana {
+    max-width: 250px;
+}
+
+.wins>img {
+    max-width: 30px;
+}
+
+.reverted {
+    transform-origin: center center;
+    transform: scale(-1, 1)
 }
 
 .modal {
@@ -119,4 +153,26 @@ main {
 
 .ask-name {
     display: none;
+}
+
+.modal.winner {
+    display: none;
+}
+
+.round-winner.vanish {
+    animation-duration: 5s;
+    animation-name: vanish;
+    animation-fill-mode: forwards;
+
+}
+
+@keyframes vanish {
+    from {
+        opacity: 100;
+    }
+
+    to {
+        opacity: 0;
+    }
+
 }

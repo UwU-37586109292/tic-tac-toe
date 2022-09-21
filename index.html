@@ -20,25 +20,26 @@
             <div class="player-info-1">
                 <div class="player-name"></div>
                 <div class="player-symbol"></div>
-                <div class="player-score"></div>
+                <div class="wins"></div>
             </div>
+            <img src="./assets/katana.svg" alt="turn indicator" id="katana">
             <div class="player-info-2">
                 <div class="player-name"></div>
                 <div class="player-symbol"></div>
-                <div class="player-score"></div>
+                <div class="wins"></div>
             </div>
         </div>
-        <div class="current-turn"></div>
+        <div class="round-winner"></div>
 
         <div class="gameboard grid grid-gap">
-            <div class="board-field" id="0"></div>
-            <div class="board-field" id="1"></div>
-            <div class="board-field" id="2"></div>
-            <div class="board-field" id="3"></div>
-            <div class="board-field" id="4"></div>
-            <div class="board-field" id="5"></div>
-            <div class="board-field" id="6"></div>
-            <div class="board-field" id="7"></div>
+            <div class="board-field border-right border-bottom" id="0"></div>
+            <div class="board-field border-right border-bottom" id="1"></div>
+            <div class="board-field border-bottom" id="2"></div>
+            <div class="board-field border-right border-bottom" id="3"></div>
+            <div class="board-field border-right border-bottom" id="4"></div>
+            <div class="board-field border-bottom" id="5"></div>
+            <div class="board-field border-right" id="6"></div>
+            <div class="board-field border-right" id="7"></div>
             <div class="board-field" id="8"></div>
         </div>
         <div class="controls">
@@ -48,7 +49,7 @@
         <!-- Select game mode modal -->
         <div class="modal game-mode">
             <div class="modal-content">
-                <p>Select game mode:</p>
+                <p>Select game mode</p>
                 <div class="flex">
                     <button id="single-player">1 player</button>
                     <button id="versus">2 players</button>
@@ -72,9 +73,20 @@
                 <div class="flex">
                     <button type="submit">That's it!</button>
                     <button type="button" id="default-name">Just call me
-                        Jeff</button>
+                        Hibiki</button>
                 </div>
             </form>
+        </div>
+
+        <!-- Winner modal -->
+        <div class="modal winner">
+            <div class="modal-content">
+                <p></p>
+                <div class="flex space-around">
+                    <button id="btnNew">New game</button>
+                    <button id="btnClose">Close</button>
+                </div>
+            </div>
         </div>
     </main>
 
