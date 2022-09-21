@@ -44,6 +44,14 @@ button {
     border: 1px solid salmon;
 }
 
+button:hover {
+    background-color: antiquewhite;
+}
+
+.controls {
+    margin-top: 20px;
+}
+
 footer {
     margin-top: auto;
 }
