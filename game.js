@@ -168,16 +168,16 @@ const displayController = (() => {
         document.getElementById('btnClose').addEventListener('click', function (e) { document.querySelector('.modal.winner').style.display = 'none' })
     }
 
-    const displayRoundWinner = (winner) => {
+    const displayRoundResult = (winner) => {
         const winnerElement = document.querySelector('.round-winner')
         winnerElement.classList.add('vanish')
-        winnerElement.textContent = `${winner.getName()} won this round`
+        winnerElement.textContent = winner === 'tie' ? 'This round was a tie' : `${winner.getName()} won this round`
 
         const newone = winnerElement.cloneNode(true);
         winnerElement.parentNode.replaceChild(newone, winnerElement);
     }
 
-    return { displayRoundWinner, displayEndGameModal, renderBoard, displayPlayerInfo, markCurrentUser, showAskNameModal, closeAskNameModal, closeChoosePlayerModal, removeWinnerFlags }
+    return { displayRoundResult, displayEndGameModal, renderBoard, displayPlayerInfo, markCurrentUser, showAskNameModal, closeAskNameModal, closeChoosePlayerModal, removeWinnerFlags }
 })();
 
 const game = (() => {
@@ -265,12 +265,12 @@ const game = (() => {
                 currentUser.addWin()
                 disableBoard()
                 displayController.displayPlayerInfo(players)
-                displayController.displayRoundWinner(currentUser)
+                displayController.displayRoundResult(currentUser)
                 if (currentUser.getScore() === 3) {
                     displayController.displayEndGameModal(currentUser)
                 } else { playNextRound() }
             } else if (gameBoard.getNumberOfAvailableSpaces() === 0) {
-                alert('its a tie!')
+                displayController.displayRoundResult('tie')
                 disableBoard()
                 playNextRound()
             }
