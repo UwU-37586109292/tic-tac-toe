@@ -150,6 +150,14 @@ const game = (() => {
             displayController.closeChoosePlayerModal()
             displayController.showAskNameModal(2)
         })
+        document.getElementsByClassName('reset')[0].addEventListener('click', function (e) {
+            gameBoard.clearBoard()
+            players.forEach(player => {
+                player.resetScore()
+            })
+            displayController.renderBoard()
+            displayController.displayPlayerInfo(players)
+        })
     }
 
     const setup = (player1, player2) => {
