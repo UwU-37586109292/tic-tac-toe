@@ -166,6 +166,10 @@ main {
 
 }
 
+.round-winner {
+    min-height: 25px;
+}
+
 @keyframes vanish {
     from {
         opacity: 100;
