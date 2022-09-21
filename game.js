@@ -196,9 +196,9 @@ const game = (() => {
         displayController.closeAskNameModal()
         const player1Name = name ? name : 'Hibiki'
         if (player2Name) {
-            setup(playerFactory(player1Name, 'O'), playerFactory(player2Name, 'X'))
+            setup(playerFactory(player1Name, '水'), playerFactory(player2Name, '火'))
         } else {
-            setup(playerFactory(player1Name, 'O'))
+            setup(playerFactory(player1Name, '水'), playerFactory('CPU', '火', true))
         }
     }
 
