@@ -185,7 +185,7 @@ const game = (() => {
         const name = new FormData(document.getElementById('name-form')).get('name-1')
         const player2Name = new FormData(document.getElementById('name-form')).get('name-2')
         displayController.closeAskNameModal()
-        const player1Name = name ? name : 'Jeff'
+        const player1Name = name ? name : 'Hibiki'
         if (player2Name) {
             setup(playerFactory(player1Name, 'O'), playerFactory(player2Name, 'X'))
         } else {

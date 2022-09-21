@@ -1,12 +1,18 @@
+@font-face {
+    font-family: Kayooh;
+    src: url(./assets/KayoohRegular-mLKyv.ttf) format("truetype")
+}
+
 html,
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-family: 'Kayooh', 'Roboto', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: xx-large;
 }
 
 body {
-    background: url(./assets/wallpaper.jpg) no-repeat center fixed;
+    background: url(./assets/wallpaper2.jpg) no-repeat center fixed;
     background-size: cover;
 
     height: 100vh;
@@ -16,11 +22,12 @@ body {
 
 header,
 footer {
-    background: lightgray;
+    background: #ababab;
     display: flex;
     align-content: center;
     justify-content: center;
     padding: 10px;
+    ;
 }
 
 .flex {
@@ -43,6 +50,9 @@ button {
     border-radius: 10px;
     background-color: beige;
     border: 1px solid salmon;
+    font-family: 'Kayooh', 'Roboto', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: x-large;
+
 }
 
 button:hover {
@@ -80,8 +90,7 @@ main {
 }
 
 .board-field {
-    font-size: 102pt;
-    font-weight: 700;
+    font-size: 50pt;
     display: flex;
     justify-content: center;
     align-items: center;
