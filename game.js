@@ -136,6 +136,15 @@ const displayController = (() => {
         }
     }
 
+    const removeWinnerFlags = () => {
+        const wins = document.getElementsByClassName('wins')
+        Array.from(wins).forEach(winElement => {
+            while (winElement.firstChild) {
+                winElement.removeChild(winElement.lastChild)
+            }
+        })
+    }
+
     const markCurrentUser = (player) => {
         const symbolToSetActive = player.getSymbol()
         if (symbolToSetActive === document.querySelector('.player-info-1 .player-symbol').textContent.slice(-1)) {
@@ -150,7 +159,7 @@ const displayController = (() => {
         }
     }
 
-    return { renderBoard, displayPlayerInfo, markCurrentUser, showAskNameModal, closeAskNameModal, closeChoosePlayerModal }
+    return { renderBoard, displayPlayerInfo, markCurrentUser, showAskNameModal, closeAskNameModal, closeChoosePlayerModal, removeWinnerFlags }
 })();
 
 const game = (() => {
@@ -168,11 +177,13 @@ const game = (() => {
         })
         document.getElementsByClassName('reset')[0].addEventListener('click', function (e) {
             gameBoard.clearBoard()
+            console.log('reset')
             players.forEach(player => {
                 player.resetScore()
             })
             displayController.renderBoard()
             displayController.displayPlayerInfo(players)
+            displayController.removeWinnerFlags()
         })
     }
 
