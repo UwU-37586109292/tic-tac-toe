@@ -124,9 +124,15 @@ const displayController = (() => {
         for (let i = 0; i < players.length; i++) {
             const player = players[i];
             const playerInfoContainer = document.querySelector(`.player-info-${i + 1}`)
+            const playerWins = playerInfoContainer.children[2]
             playerInfoContainer.children[0].innerText = `Player name: ${player.getName()}`
             playerInfoContainer.children[1].innerText = `Symbol: ${player.getSymbol()}`
-            playerInfoContainer.children[2].innerText = `Current score: ${player.getScore()}`
+            if (playerWins.children.length < player.getScore()) {
+                const winSvg = document.createElement('img')
+                winSvg.setAttribute('src', '../assets/konoha.svg')
+                winSvg.setAttribute('alt', 'win-symbol')
+                playerWins.appendChild(winSvg)
+            }
         }
     }
 
@@ -135,11 +141,11 @@ const displayController = (() => {
         if (symbolToSetActive === document.querySelector('.player-info-1 .player-symbol').textContent.slice(-1)) {
             document.querySelector('.player-info-1').classList.add('active')
             document.querySelector('.player-info-2').classList.remove('active')
-            document.querySelector('img').classList.remove('reverted')
+            document.getElementById('katana').classList.remove('reverted')
         } else {
             document.querySelector('.player-info-1').classList.remove('active')
             document.querySelector('.player-info-2').classList.add('active')
-            document.querySelector('img').classList.add('reverted')
+            document.getElementById('katana').classList.add('reverted')
 
         }
     }
