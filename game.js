@@ -177,7 +177,6 @@ const game = (() => {
         })
         document.getElementsByClassName('reset')[0].addEventListener('click', function (e) {
             gameBoard.clearBoard()
-            console.log('reset')
             players.forEach(player => {
                 player.resetScore()
             })
