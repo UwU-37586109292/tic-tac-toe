@@ -89,15 +89,14 @@ const playerFactory = (name, symbol, useAI) => {
 const displayController = (() => {
 
     const showAskNameModal = (numberOfPlayers) => {
-        const form = document.getElementById('name-modal')
-        form.style.display = 'block'
+        document.getElementById('name-modal').style.display = 'block'
         const nameForm = document.getElementById('name-form')
         const defaultNameBtn = document.getElementById('default-name')
         nameForm.addEventListener('submit', game.handlePlayerNameSubmit)
         defaultNameBtn.addEventListener('click', game.handlePlayerNameSubmit)
 
         if (numberOfPlayers > 1) {
-            document.getElementById('player-2-input').style.display = 'block'
+            document.getElementById('player-2-input').style.display = 'flex'
             defaultNameBtn.style.display = 'none'
         } else {
             document.getElementById('player-2-input').style.display = 'none'
