@@ -128,7 +128,7 @@ const displayController = (() => {
             playerInfoContainer.children[1].innerText = `Symbol: ${player.getSymbol()}`
             if (playerWins.children.length < player.getScore()) {
                 const winSvg = document.createElement('img')
-                winSvg.setAttribute('src', '../assets/konoha.svg')
+                winSvg.setAttribute('src', './assets/konoha.svg')
                 winSvg.setAttribute('alt', 'win-symbol')
                 playerWins.appendChild(winSvg)
             }
