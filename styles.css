@@ -1,14 +1,14 @@
 @font-face {
-    font-family: Kayooh;
-    src: url(./assets/KayoohRegular-mLKyv.ttf) format("truetype")
+    font-family: Orchidee;
+    src: url(./assets/OrchideeMedium.ttf) format("truetype")
 }
 
 html,
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Kayooh', 'Roboto', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    font-size: xx-large;
+    font-family: 'Orchidee', 'Roboto', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: x-large;
 }
 
 body {
@@ -50,9 +50,8 @@ button {
     border-radius: 10px;
     background-color: beige;
     border: 1px solid salmon;
-    font-family: 'Kayooh', 'Roboto', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    font-size: x-large;
-
+    font-family: 'Orchidee', 'Roboto', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: large;
 }
 
 button:hover {
@@ -167,7 +166,7 @@ main {
 }
 
 .round-winner {
-    min-height: 25px;
+    min-height: 30px;
 }
 
 @keyframes vanish {
@@ -179,4 +178,9 @@ main {
         opacity: 0;
     }
 
+}
+
+span.required {
+    font-family: 'Roboto', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: x-large;
 }
