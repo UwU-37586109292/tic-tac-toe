@@ -176,7 +176,21 @@ const displayController = (() => {
         winnerElement.parentNode.replaceChild(newone, winnerElement);
     }
 
-    return { displayRoundResult, displayEndGameModal, renderBoard, displayPlayerInfo, markCurrentUser, showAskNameModal, closeAskNameModal, closeChoosePlayerModal, removeWinnerFlags }
+    const displayResetGameModal = () => {
+        document.querySelector('.modal.reset').style.display = 'block'
+        document.getElementById('btnConfirmReset').addEventListener('click', game.reset)
+        document.getElementById('btnCloseReset').addEventListener('click', closeResetGameModal)
+    }
+    const closeResetGameModal = () => {
+        document.querySelector('.modal.reset').style.display = 'none'
+        document.getElementById('btnConfirmReset').removeEventListener('click', game.reset)
+        document.getElementById('btnCloseReset').removeEventListener('click', closeResetGameModal)
+    }
+
+    return {
+        displayRoundResult, displayEndGameModal, renderBoard, displayPlayerInfo, markCurrentUser, showAskNameModal,
+        closeAskNameModal, closeChoosePlayerModal, removeWinnerFlags, displayResetGameModal, closeResetGameModal
+    }
 })();
 
 const game = (() => {
@@ -192,7 +206,7 @@ const game = (() => {
             displayController.closeChoosePlayerModal()
             displayController.showAskNameModal(2)
         })
-        document.getElementsByClassName('reset')[0].addEventListener('click', reset)
+        document.getElementsByClassName('reset')[0].addEventListener('click', displayController.displayResetGameModal)
     }
 
     const reset = () => {
@@ -204,6 +218,7 @@ const game = (() => {
         displayController.renderBoard()
         displayController.displayPlayerInfo(players)
         displayController.removeWinnerFlags()
+        displayController.closeResetGameModal()
     }
 
     const setup = (player1, player2) => {
