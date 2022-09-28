@@ -184,3 +184,7 @@ span.required {
     font-family: 'Roboto', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     font-size: x-large;
 }
+
+.modal.reset {
+    display: none;
+}
