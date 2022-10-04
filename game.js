@@ -100,6 +100,7 @@ const displayController = (() => {
             defaultNameBtn.style.display = 'none'
         } else {
             document.getElementById('player-2-input').style.display = 'none'
+            document.getElementById('name-2').ariaRequired = 'false'
             defaultNameBtn.style.display = 'block'
         }
     }
